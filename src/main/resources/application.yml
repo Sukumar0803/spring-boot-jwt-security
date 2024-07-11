@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: user-mgmt-svc
+
+  config:
+    import: vault://
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      uri: http://localhost:8200
+      kv:
+        enabled: true
+        backend: secret
+        profile-separator: /
+      connection-timeout: 5000
+      read-timeout: 15000
+      token: hvs.lcvGCp7DgmekkDMhodYaPpai
+
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/usermanagement
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+      # JPA Properties
+    hikari:
+      max-lifetime: 840000
+      minimum-idle: 4
+      maximum-pool-size: 40
+      idle-timeout: 600000
+      connection-timeout: 3000
+      validation-timeout: 1000
+      login-timeout: 2000
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 1000
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+      database: mysql
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+server:
+  port: 8081
+  forward-headers-strategy: framework
+
+springdoc:
+  version: '@springdoc.version@'
+  cache:
+    disabled: true
+  api-docs:
+    version: OPENAPI_3_0
+    enabled: true
+  swagger-ui:
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+
+logging:
+  level:
+    com:
+      microservices:
+        usermanagement:
+          UserManagementApplication: DEBUG
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5971
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:9000/eureka/
+#  instance:
+#    preferIpAddress: true
